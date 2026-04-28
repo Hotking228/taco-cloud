@@ -9,9 +9,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-
+/*
+Данный класс реализует интерфейс IngredientRepository с использованием голого
+Spring JDBC, для того чтобы всё работало необходимо убрать extends в IngredientRepository
+и убрать закомментированные Override в данном классе
+На данный момент класс не используется.
+Спринг автоматически находит реализацию IngredientRepository.
+Аналогично работает JdbcOrderRepository
+ */
 @Repository
-public class JdbcIngredientRepository implements IngredientRepository{
+public class JdbcIngredientRepository /*implements IngredientRepository*/{
 
     private JdbcTemplate jdbcTemplate;
 
@@ -19,7 +26,7 @@ public class JdbcIngredientRepository implements IngredientRepository{
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
+//    @Override
     public Iterable<Ingredient> findAll() {
         return jdbcTemplate.query(
                 "select id, name, type from Ingredient",
@@ -36,7 +43,7 @@ public class JdbcIngredientRepository implements IngredientRepository{
         );
     }
 
-    @Override
+//    @Override
     public Optional<Ingredient> findById(String id) {
         List<Ingredient> results = jdbcTemplate.query(
                 "select id, name, type from Ingredient where id=?",
@@ -49,7 +56,7 @@ public class JdbcIngredientRepository implements IngredientRepository{
                 Optional.of(results.get(0));
     }
 
-    @Override
+//    @Override
     @Transactional
     public Ingredient save(Ingredient ingredient) {
         jdbcTemplate.update(
