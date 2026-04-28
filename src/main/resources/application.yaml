@@ -2,5 +2,11 @@ spring:
   application:
     name: taco-cloud
   datasource:
-    generate-unique-name: false
-    name: tacocloud
+    url: jdbc:h2:mem:tacocloud
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    show_sql: true
+    hibernate:
+      ddl-auto: create

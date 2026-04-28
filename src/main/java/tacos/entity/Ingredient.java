@@ -1,16 +1,20 @@
 package tacos.entity;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.*;
+import lombok.*;
+
 
 @Data
-@Table
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@Table(name = "ingredient")
 public class Ingredient {
 
     @Id
     private final String id;
     private final String name;
+    @Enumerated(EnumType.STRING)
     private final Type type;
 
     public enum Type{

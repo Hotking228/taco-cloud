@@ -17,7 +17,7 @@ Spring JDBC, для того чтобы всё работало необходи
 Спринг автоматически находит реализацию IngredientRepository.
 Аналогично работает JdbcOrderRepository
  */
-@Repository
+//@Repository
 public class JdbcIngredientRepository /*implements IngredientRepository*/{
 
     private JdbcTemplate jdbcTemplate;
@@ -29,7 +29,7 @@ public class JdbcIngredientRepository /*implements IngredientRepository*/{
 //    @Override
     public Iterable<Ingredient> findAll() {
         return jdbcTemplate.query(
-                "select id, name, type from Ingredient",
+                "select id, name, type from ingredient",
                 this::mapRowToIngredient
         );
     }
@@ -46,7 +46,7 @@ public class JdbcIngredientRepository /*implements IngredientRepository*/{
 //    @Override
     public Optional<Ingredient> findById(String id) {
         List<Ingredient> results = jdbcTemplate.query(
-                "select id, name, type from Ingredient where id=?",
+                "select id, name, type from ingredient where id=?",
                 this::mapRowToIngredient,
                 id
         );
@@ -60,7 +60,7 @@ public class JdbcIngredientRepository /*implements IngredientRepository*/{
     @Transactional
     public Ingredient save(Ingredient ingredient) {
         jdbcTemplate.update(
-                "insert into Ingredient (id, name, type) values (?, ?, ?)",
+                "insert into ingredient (id, name, type) values (?, ?, ?)",
                 ingredient.getId(),
                 ingredient.getName(),
                 ingredient.getType().toString()

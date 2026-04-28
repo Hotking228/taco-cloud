@@ -15,6 +15,7 @@ import tacos.entity.TacoOrder;
 import java.sql.Types;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -99,6 +100,7 @@ public class JdbcOrderRepository /*implements OrderRepository*/{
         jdbcOperations.update(psc, keyHolder);
         long tacoId = keyHolder.getKey().longValue();
         taco.setId(tacoId);
+        List<Ingredient> ingredients = new ArrayList<>();
 
         saveIngredientRefs(tacoId, taco.getIngredients());
 
