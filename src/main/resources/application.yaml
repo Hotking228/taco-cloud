@@ -1,12 +1,12 @@
 spring:
   application:
     name: taco-cloud
-  datasource:
-    url: jdbc:h2:mem:tacocloud
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  jpa:
-    show_sql: true
-    hibernate:
-      ddl-auto: create
+  data:
+    cassandra:
+      keyspace-name: taco_cloud
+      schema-action: create-if-not-exists
+      local-datacenter: datacenter1
+      contact-points: 127.0.0.1
+      port: 9042
+      request:
+        timeout: 10s

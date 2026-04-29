@@ -1,14 +1,15 @@
 package tacos.repository.order;
 
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.cassandra.repository.Query;
 import tacos.entity.TacoOrder;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public interface OrderRepository
-        extends CrudRepository<TacoOrder, Long> {
+        extends CrudRepository<TacoOrder, UUID> {
 
     List<TacoOrder> findByDeliveryZip(String deliveryZip);
 

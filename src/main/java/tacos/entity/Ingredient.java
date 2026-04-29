@@ -1,21 +1,20 @@
 package tacos.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.cassandra.core.mapping.Table;
 
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-@Table(name = "ingredient")
+@Table("ingredients")
 public class Ingredient {
 
     @Id
-    private final String id;
-    private final String name;
-    @Enumerated(EnumType.STRING)
-    private final Type type;
+    private String id;
+    private String name;
+    private Type type;
 
     public enum Type{
         WRAP,
