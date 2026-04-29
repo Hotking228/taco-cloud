@@ -2,13 +2,13 @@ package tacos.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-@Table("ingredients")
+@Document
 public class Ingredient {
 
     @Id

@@ -1,6 +1,6 @@
 package tacos.repository.order;
 
-import org.springframework.data.cassandra.repository.Query;
+import org.springframework.data.mongodb.repository.Query;
 import tacos.entity.TacoOrder;
 import org.springframework.data.repository.CrudRepository;
 

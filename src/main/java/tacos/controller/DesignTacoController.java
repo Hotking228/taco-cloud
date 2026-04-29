@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import tacos.entity.Ingredient;
 import tacos.entity.Taco;
 import tacos.entity.TacoOrder;
-import tacos.entity.TacoUDT;
 import tacos.repository.ingredient.IngredientRepository;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(@Valid TacoUDT taco, Errors errors,
+    public String processTaco(@Valid Taco taco, Errors errors,
                               @ModelAttribute TacoOrder tacoOrder){
         if(errors.hasErrors()){
             errors.getAllErrors().stream().forEach(System.out::println);
