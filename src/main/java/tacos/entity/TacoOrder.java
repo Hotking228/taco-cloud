@@ -56,7 +56,50 @@ public class TacoOrder implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Taco> tacos = new ArrayList<>();
 
+    @ManyToOne
+    private User user;
+
     public void addTaco(Taco taco){
         this.tacos.add(taco);
+    }
+
+    public void setUser(User user){
+        if(user == null){
+            user = new User();
+        }
+
+        this.user = user;
+        deliveryName = deliveryName == null ? (
+                user.getFullname() == null ?
+                    "" :
+                    user.getFullname()
+                ) : deliveryName;
+        deliveryStreet = deliveryStreet == null ? (
+                            user.getStreet() == null ?
+                                    "" :
+                                    user.getStreet()) :
+                            deliveryStreet;
+        deliveryCity = deliveryCity == null ? (
+                user.getCity() == null ?
+                "" :
+                        user.getCity()) :
+                deliveryCity;
+        deliveryState = deliveryState == null ? (
+                user.getState() == null ?
+                "" :
+                        user.getState()) :
+                deliveryState;
+        deliveryZip = deliveryZip == null ? (
+                user.getZip() == null ?
+                "" :
+                        user.getZip()) :
+                deliveryZip;
+        ccNumber = ccNumber == null ?
+                "" :
+                ccNumber;
+        ccExpiration = ccExpiration == null ?
+                "" :
+                ccExpiration;;
+        ccCVV = "";
     }
 }

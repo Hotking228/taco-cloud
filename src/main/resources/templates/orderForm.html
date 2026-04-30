@@ -7,7 +7,9 @@
     </head>
 
     <body>
+    <div th:replace="~{fragments/header :: header}"></div>
     <form method="post" th:action="@{/orders}" th:object="${tacoOrder}">
+        <div th:replace="~{fragments/header :: csrf}"></div>
         <h1>Order your taco creations!</h1>
 
         <img th:src="@{/images/TacoCloud.png}"/>

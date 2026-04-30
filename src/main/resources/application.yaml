@@ -7,6 +7,17 @@ spring:
     username: sa
     password:
   jpa:
-    show_sql: true
+    show_sql: false
     hibernate:
       ddl-auto: create
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+            redirect-uri: "http://localhost:8080/login/oauth2/code/google"

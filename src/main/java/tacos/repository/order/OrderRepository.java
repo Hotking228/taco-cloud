@@ -46,4 +46,7 @@ public interface OrderRepository
 
     @Query("select t_o from TacoOrder t_o where t_o.deliveryCity='Seattle'")
     List<TacoOrder> findOrdersDeliveredInSeattle();
+
+    @Query("delete from TacoOrder")
+    void deleteAll();
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Header</title>
+    </head>
+
+    <body>
+        <div th:fragment="header">
+            <form method="post" th:action="@{/logout}">
+                <input type="submit" value="Logout"/>
+            </form>
+        </div>
+
+        <div th:fragment="csrf">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+        </div>
+    </body>
+</html>

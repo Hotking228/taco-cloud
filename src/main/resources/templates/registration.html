@@ -10,6 +10,7 @@
         <img src="/images/TacoCloud.png"/>
 
         <form method="post" th:action="@{/register}" id="registerForm">
+            <div th:replace="~{fragments/header :: csrf}"></div>
             <label for="username">Username: </label>
             <input type="text" name="username" id="username"/><br/>
 

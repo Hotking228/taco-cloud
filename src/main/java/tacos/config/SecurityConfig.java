@@ -2,6 +2,8 @@ package tacos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@EnableMethodSecurity //Позволяет проверять на уровне методов, есть ли у пользователя
+                //указанные привилегии, но на самом деле можно выполнить любой SpEL
 public class SecurityConfig {
 
     @Bean
@@ -122,8 +126,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/design", "/orders").access(new WebExpressionAuthorizationManager("hasRole('USER')"))
-                        .requestMatchers("/", "/**").access(new WebExpressionAuthorizationManager("hasRole('USER')")))
+                        .requestMatchers("/design", "/orders").authenticated()
+                        .requestMatchers("/", "/**").access(new WebExpressionAuthorizationManager("permitAll()")))
                 .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true))//второй параметр - всегда переходим
@@ -131,6 +135,16 @@ public class SecurityConfig {
                                                             //когда пользователь изначально открыл страницу логина
                                                             //если false и пользователь открыл другую страницу, то после
                                                             // логина будет перенаправлен на нее, лучше всегда ставить true
+                .oauth2Login(login -> login
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessUrl("/login")
+                        .permitAll())
                 .build();
     }
 }
