@@ -1,11 +1,15 @@
 spring:
   application:
-    name: taco-cloud
+    name: taco-cloud #Название приложения
   datasource:
-    url: jdbc:h2:mem:tacocloud
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    schema: #Источник данных - схема
+      - schema.sql
+    data: # Источник данных - данные
+      - data.sql
+    url: jdbc:h2:mem:tacocloud # URL БД
+    driver-class-name: org.h2.Driver # драйвер СУБД
+    username: tacouser # пользователь БД
+    password: tacopassword # пароль БД
   jpa:
     show_sql: false
     hibernate:
@@ -20,4 +24,49 @@ spring:
             scope:
               - email
               - profile
-            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            redirect-uri: "https://localhost:8443/login/oauth2/code/google"
+# Для генерации ssl ключей используем:
+# keytool -keystore mykeys.jks -genkey -alias tomcat -keyalg RSA
+server:
+  port: 8443
+  ssl:
+    key-store: ${KEY_STORE_PATH}
+    #file:/home/hotking/keys/mykeys.jks
+    key-store-password: ${KEY_STORE_PASSWORD}
+    key-password: ${KEY_STORE_PASSWORD}
+taco:
+  orders:
+    page-size: 10
+logging:
+  level:
+    root: warn
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+logging:
+  level:
+    root: debug
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+logging:
+  level:
+    root: info
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+logging:
+  level:
+    root: info

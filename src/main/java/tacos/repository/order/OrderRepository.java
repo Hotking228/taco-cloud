@@ -1,8 +1,10 @@
 package tacos.repository.order;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import tacos.entity.TacoOrder;
 import org.springframework.data.repository.CrudRepository;
+import tacos.entity.User;
 
 import java.util.Date;
 import java.util.List;
@@ -49,4 +51,6 @@ public interface OrderRepository
 
     @Query("delete from TacoOrder")
     void deleteAll();
+
+    List<TacoOrder> findByUserOrderByPlacedAtDesc(User user, Pageable pageable);
 }

@@ -2,10 +2,15 @@ package tacos.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import tacos.entity.TacoOrder;
 import tacos.entity.User;
+import tacos.props.OrderProps;
 import tacos.repository.UserRepository;
 import tacos.repository.order.OrderRepository;
 
@@ -26,9 +32,20 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class OrderController {
 
+    private final OrderProps props;
     private final OrderRepository orderRepo;
     private final UserRepository userRepo;
 
+    @GetMapping
+    public String ordersForUser(
+            @AuthenticationPrincipal User user, Model model){
+
+        Pageable pageable = PageRequest.of(0, props.getPageSize());
+        model.addAttribute("orders",
+                orderRepo.findByUserOrderByPlacedAtDesc(user, pageable));
+
+        return "orderList";
+    }
 
     @GetMapping("/current")
     public String orderForm(@AuthenticationPrincipal User user,
