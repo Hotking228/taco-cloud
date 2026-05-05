@@ -1,4 +1,7 @@
 spring:
+  data:
+    rest:
+      base-path: /data-api
   application:
     name: taco-cloud #Название приложения
   datasource:

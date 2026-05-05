@@ -25,6 +25,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    /*
+    Зависимость ниже предоставляет HATEOAS:
+
+        Эти гиперссылки являются реализациями гипермедиа
+    как механизма состояния приложения (Hypermedia as Engine of Appli-
+    cation State, HATEOAS). Клиент, использующий этот API, может (если
+    понадобится) использовать эти гиперссылки для навигации по API
+    и выполнения следующих запросов.
+     */
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     runtimeOnly 'com.h2database:h2:2.4.240'
 

@@ -2,12 +2,9 @@ package tacos.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +18,7 @@ import tacos.entity.TacoOrder;
 import tacos.entity.User;
 import tacos.props.OrderProps;
 import tacos.repository.UserRepository;
-import tacos.repository.order.OrderRepository;
-
-import java.security.Principal;
+import tacos.repository.OrderRepository;
 
 @Slf4j
 @Controller

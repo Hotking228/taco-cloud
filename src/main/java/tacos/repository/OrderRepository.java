@@ -1,4 +1,4 @@
-package tacos.repository.order;
+package tacos.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

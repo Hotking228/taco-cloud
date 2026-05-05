@@ -2,8 +2,6 @@ package tacos.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -12,7 +10,7 @@ import tacos.entity.Ingredient;
 import tacos.entity.Taco;
 import tacos.repository.TacoRepository;
 import tacos.repository.UserRepository;
-import tacos.repository.ingredient.IngredientRepository;
+import tacos.repository.IngredientRepository;
 
 import java.util.List;
 
