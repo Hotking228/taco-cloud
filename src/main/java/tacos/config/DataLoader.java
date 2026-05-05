@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tacos.entity.Ingredient;
 import tacos.entity.Taco;
+import tacos.entity.User;
 import tacos.repository.TacoRepository;
 import tacos.repository.UserRepository;
 import tacos.repository.IngredientRepository;
@@ -81,5 +82,17 @@ public class DataLoader implements CommandLineRunner {
                         lettuce, salsa))
                 .build();
         tacoRepo.save(taco3);
+
+        userRepo.save(User.builder()
+                .username("habuma")
+                .password(passwordEncoder.encode("password"))
+                .role(User.Role.ROLE_ADMIN)
+                .build());
+
+        userRepo.save(User.builder()
+                .username("tacochef")
+                .password(passwordEncoder.encode("password"))
+                .role(User.Role.ROLE_ADMIN)
+                .build());
     }
 }

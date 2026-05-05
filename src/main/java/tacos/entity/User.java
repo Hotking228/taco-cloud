@@ -32,10 +32,11 @@ public class User implements UserDetails {
     private String state;
     private String zip;
     private String phoneNumber;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        return Arrays.asList(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -56,5 +57,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public enum Role{
+        ROLE_ADMIN,
+        ROLE_USER
     }
 }
