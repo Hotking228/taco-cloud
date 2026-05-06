@@ -3,5 +3,11 @@ package tacos.messaging;
 import tacos.entity.TacoOrder;
 
 public interface OrderMessagingService {
-    void sendOrder(TacoOrder order);
+    default void sendOrder(TacoOrder order){
+        throw new RuntimeException();
+    }
+
+    default void convertAndSend(TacoOrder order){
+        throw new RuntimeException();
+    }
 }

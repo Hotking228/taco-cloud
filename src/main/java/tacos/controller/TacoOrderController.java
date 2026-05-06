@@ -5,7 +5,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tacos.entity.TacoOrder;
-import tacos.repository.order.OrderRepository;
+import tacos.messaging.OrderMessagingService;
+import tacos.repository.OrderRepository;
 
 @RestController
 @RequestMapping(path = "/api/order",
@@ -15,6 +16,13 @@ import tacos.repository.order.OrderRepository;
 public class TacoOrderController {
 
     private final OrderRepository orderRepo;
+    private final OrderMessagingService messageService;
+
+    @PostMapping(consumes = "application/json")
+    public TacoOrder postOrder(@RequestBody TacoOrder order){
+        messageService.sendOrder(order);
+        return orderRepo.save(order);
+    }
 
     @PutMapping(path = "/{orderId}", consumes = "application/json")//полностью изменяем объект
     public TacoOrder putOrder(
