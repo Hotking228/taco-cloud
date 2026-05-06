@@ -1,4 +1,9 @@
 spring:
+  artemis:
+    host: localhost
+    port: 61616
+    user: tacoweb
+    password: 12345
   data:
     rest:
       base-path: /data-api
