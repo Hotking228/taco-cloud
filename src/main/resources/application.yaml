@@ -19,15 +19,32 @@ spring:
       ddl-auto: create
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
       client:
         registration:
+          taco-admin-client:
+            provider: tacocloud
+            client-id: taco-admin-client
+            client-secret: secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "https://127.0.0.1:8443/login/oauth2/code/{registrationId}"
+            scope: writeIngredients,deleteIngredients,openid
+        provider:
+          tacocloud:
+#            issuer-uri: http://127.0.0.1:9000
+            authorization-uri: http://127.0.0.1:9000/oauth2/authorize
+            token-uri: http://127.0.0.1:9000/oauth2/token
+            jwk-set-uri: http://127.0.0.1:9000/oauth2/jwks
+            user-name-attribute: sub
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
-            redirect-uri: "https://localhost:8443/login/oauth2/code/google"
+            redirect-uri: "https://127.0.0.1:8443/login/oauth2/code/google"
 # Для генерации ssl ключей используем:
 # keytool -keystore mykeys.jks -genkey -alias tomcat -keyalg RSA
 server:

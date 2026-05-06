@@ -1,7 +1,10 @@
 package tacos.config;
 
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
@@ -20,6 +25,8 @@ import tacos.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableMethodSecurity //Позволяет проверять на уровне методов, есть ли у пользователя
@@ -123,11 +130,27 @@ public class SecurityConfig {
      */
 
     @Bean
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws
+            Exception {
+        http
+                .authorizeRequests(
+                        authorizeRequests -> authorizeRequests.anyRequest().authenticated()
+                )
+                .oauth2Login(
+                        oauth2Login ->
+                                oauth2Login.loginPage("/oauth2/authorization/taco-admin-client"))
+                .oauth2Client(withDefaults());
+        return http.build();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/design", "/orders").authenticated()
-                        .requestMatchers("/", "/**").access(new WebExpressionAuthorizationManager("permitAll()")))
+                        .requestMatchers("/", "/**").access(new WebExpressionAuthorizationManager("permitAll()"))
+                        .requestMatchers(HttpMethod.POST, "/api/ingredients").hasAuthority("SCOPE_writeIngredients")
+                        .requestMatchers(HttpMethod.DELETE, "/api/ingredients").hasAuthority("SCOPE_deleteIngredients"))
                 .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true))//второй параметр - всегда переходим
@@ -145,6 +168,8 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/login")
                         .permitAll())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(withDefaults()))
                 .build();
     }
 }
