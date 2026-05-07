@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import tacos.entity.TacoOrder;
 import tacos.entity.User;
+import tacos.messaging.OrderMessagingService;
 import tacos.props.OrderProps;
 import tacos.repository.UserRepository;
 import tacos.repository.OrderRepository;
@@ -30,6 +31,7 @@ public class OrderController {
     private final OrderProps props;
     private final OrderRepository orderRepo;
     private final UserRepository userRepo;
+    private final OrderMessagingService orderMessagingService;
 
     @GetMapping
     public String ordersForUser(
@@ -58,6 +60,8 @@ public class OrderController {
         if(errors.hasErrors()){
             return "orderForm";
         }
+
+        orderMessagingService.sendOrder(tacoOrder);
         orderRepo.save(tacoOrder);
         sessionStatus.setComplete();
 

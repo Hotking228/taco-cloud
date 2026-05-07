@@ -1,4 +1,12 @@
 spring:
+  rabbitmq:
+    template:
+      exchange: tacocloud.order
+      routing-key: kitchen.central
+    host: localhost
+    port: 5672
+    username: user
+    password: password
   data:
     rest:
       base-path: /data-api
