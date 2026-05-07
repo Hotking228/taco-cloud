@@ -1,23 +1,20 @@
 package tacos.messaging;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Component;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+import tacos.controller.MessageController;
 import tacos.entity.TacoOrder;
 
-@Component
+/*
+У Кафки нет активной модели принятия сообщений
+ */
+@Service
 @RequiredArgsConstructor
 public class OrderListener {
 
- //    private final KitchenUI ui;
-
-
-    /*
-        Аналогично JmsListener, смотреть коммит "Пассивная модель mq" или как то так,
-    Он идет до этого коммита
-     */
-    @RabbitListener(queues = "tacocloud.order")
-    public void receiveObject(TacoOrder order){
-//        ui.display(order);
+    @KafkaListener(topics = "tacocloud.orders.topic")
+    public void handle(TacoOrder order){
+        MessageController.orders.add(order);
     }
 }

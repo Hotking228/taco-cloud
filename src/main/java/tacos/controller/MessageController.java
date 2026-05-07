@@ -1,30 +1,27 @@
 package tacos.controller;
 
-import ch.qos.logback.classic.pattern.MessageConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import tacos.entity.Taco;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tacos.entity.TacoOrder;
-import tacos.messaging.RabbitOrderMessageReceiver;
+
+import java.util.Queue;
 
 @RestController
+@CrossOrigin("https://localhost:8443")
 @RequestMapping(path = "/message",
                 produces = "application/json")
-@CrossOrigin("https://localhost:8443")
 @RequiredArgsConstructor
 public class MessageController {
 
-    private final RabbitOrderMessageReceiver receiver;
-
-    /*
-        В отличие от JmsTemplate, RabbitMQ сразу же вернет управление, если в очереди нет
-     сообщения, тк передается параметр время ожидания сообщения, который по умолчанию 0 мс
-     */
+    public static Queue<TacoOrder> orders;
 
     @GetMapping
-    public TacoOrder showMessage(){
-        return receiver.receiveAndConvertOrder();
+    public TacoOrder showLastOrder(){
+        if(orders.isEmpty()) return null;
+        return orders.poll();
     }
 }
