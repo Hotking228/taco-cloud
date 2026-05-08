@@ -13,8 +13,11 @@ import tacos.entity.TacoOrder;
 @RequiredArgsConstructor
 public class OrderListener {
 
-    @KafkaListener(topics = "tacocloud.orders.topic")
+    private final MessageController messageController;
+
+    @KafkaListener(topics = "tacocloud.orders.topic",
+                   groupId = "tacocloud.cloud.group")
     public void handle(TacoOrder order){
-        MessageController.orders.add(order);
+        messageController.orders.add(order);
     }
 }

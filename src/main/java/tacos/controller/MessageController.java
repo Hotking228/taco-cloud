@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tacos.entity.TacoOrder;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 @RestController
@@ -17,7 +18,7 @@ import java.util.Queue;
 @RequiredArgsConstructor
 public class MessageController {
 
-    public static Queue<TacoOrder> orders;
+    public Queue<TacoOrder> orders = new LinkedList<>();
 
     @GetMapping
     public TacoOrder showLastOrder(){
