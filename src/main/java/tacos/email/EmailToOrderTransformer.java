@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.similarity.LevenshteinDetailedDistance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.integration.annotation.Transformer;
 import org.springframework.integration.mail.transformer.AbstractMailMessageTransformer;
 import org.springframework.integration.support.AbstractIntegrationMessageBuilder;
 import org.springframework.integration.support.MessageBuilder;
@@ -18,6 +19,7 @@ import tacos.repository.IngredientRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class EmailToOrderTransformer
 
     @Override
     protected AbstractIntegrationMessageBuilder<EmailOrder> doTransform(Message mailMessage) {
+        System.out.println("===========Start checking mail===========");
         EmailOrder tacoOrder = processPayload(mailMessage);
         return MessageBuilder.withPayload(tacoOrder);
     }
@@ -71,12 +74,21 @@ public class EmailToOrderTransformer
                     }
                 }
 
-                Taco taco = new Taco(tacoName);
-                taco.setIngredients(ingredientCodes);
+
+                Taco taco = Taco.builder()
+                        .name(tacoName)
+                        .ingredients(ingredientCodes.stream()
+                                .map(i -> {
+                                    Optional<Ingredient> ingredient = ingredientRepo.findById(i);
+                                    return ingredient.get();
+                                })
+                                .toList())
+                        .build();
                 order.addTaco(taco);
             }
         }
 
+        System.out.println(order);
         return order;
     }
 

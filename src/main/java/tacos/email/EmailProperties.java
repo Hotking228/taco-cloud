@@ -1,4 +1,4 @@
-package tacos.config;
+package tacos.email;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,7 +16,7 @@ public class EmailProperties {
     private Long pollRate = 30_000L;
 
     public String getImapUrl(){
-        return String.format("imaps://%s:%s@%s/%s",
+        return String.format("imaps://%s:%s@%s:993/%s",
                 username, password, host, mailbox);
     }
 }

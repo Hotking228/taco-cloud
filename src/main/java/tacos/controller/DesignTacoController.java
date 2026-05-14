@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import tacos.config.EmailProperties;
+import tacos.email.EmailProperties;
 import tacos.entity.Ingredient;
 import tacos.entity.Taco;
 import tacos.entity.TacoOrder;
