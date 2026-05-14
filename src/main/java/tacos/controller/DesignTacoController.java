@@ -1,11 +1,13 @@
 package tacos.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import tacos.config.EmailProperties;
 import tacos.entity.Ingredient;
 import tacos.entity.Taco;
 import tacos.entity.TacoOrder;
@@ -19,14 +21,12 @@ import java.util.stream.StreamSupport;
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
+@RequiredArgsConstructor
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
+    private final EmailProperties props;
 
-    public DesignTacoController(
-            IngredientRepository ingredientRepo){
-        this.ingredientRepo = ingredientRepo;
-    }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model){

@@ -25,7 +25,7 @@ public class FileWriterIntegrationConfig {
 
     /*
      PublishSubscribeChannel – сообщения, опубликованные в Pub
-    lishSubscribeChannel, передаются одному или нескольким по
+    lishSubscribeChannel, System.out.println(props.getUsername());передаются одному или нескольким по
     лучателям. Если получателей несколько, то все они получат со
     общение;
 
@@ -61,29 +61,34 @@ public class FileWriterIntegrationConfig {
     на основе Flux Project Reactor.
      */
     @Bean
-    public MessageChannel orderChannel(){
+    public MessageChannel orderChannel() {
         return new DirectChannel();
     }
 
     @Bean
-    public IntegrationFlow fileWriterFlow(){
+    public IntegrationFlow fileWriterFlow() {
         return IntegrationFlow
                 .from(MessageChannels.direct("textInChannel"))//Адаптер канала
                 .channel("orderChannel")
                 .<String>filter(s -> !s.isEmpty())//фильтр
                 .<String, String>transform(t -> t.toUpperCase())//маппер
-                .<String, String>route(s -> s.contains("f") ? "contains" : "dont contains", //Позволяет перенаправить сообщения в разные потоки
-                        mapping -> mapping
-                        .subFlowMapping("contains", sf -> sf
-                                .handle(MessageChannels.direct("containsF")))
-                        .subFlowMapping("dont contains", sf -> sf
-                                .handle(MessageChannels.direct("dontContainsF"))))
-                .split()//сплитит одно сообщение на несколько, аналог flatMap из stream
-                        //если использовать совместно с route можно одно сообщение разделить на несколько потоков
+                .split(orderSplitter())//сплитит одно сообщение на несколько, аналог flatMap из stream
+                //если использовать совместно с route можно одно сообщение разделить на несколько потоков
                 .handle(Files //Активирует какую - либо службу, в данном случае - запись данных в файл
                         .outboundAdapter(new File("/tmp/sia6/files"))
                         .fileExistsMode(FileExistsMode.REPLACE)
                         .appendNewLine(true))
+                .<String, String>route(s -> s.contains("f") ? "contains" : "dont contains", //Позволяет перенаправить сообщения в разные потоки
+                        mapping -> mapping
+                                .subFlowMapping("contains", sf -> sf
+                                        .channel("containsF"))
+                                .subFlowMapping("dont contains", sf -> sf
+                                        .channel("dontContainsF")))
                 .get();
+    }
+
+    @Bean
+    public OrderSplitter orderSplitter(){
+        return new OrderSplitter();
     }
 }
