@@ -68,7 +68,7 @@ public class FileWriterIntegrationConfig {
     @Bean
     public IntegrationFlow fileWriterFlow(){
         return IntegrationFlow
-                .from(MessageChannels.direct("textInChannel"))
+                .from(MessageChannels.direct("textInChannel"))//Адаптер канала
                 .channel("orderChannel")
                 .<String>filter(s -> !s.isEmpty())//фильтр
                 .<String, String>transform(t -> t.toUpperCase())//маппер
@@ -80,7 +80,7 @@ public class FileWriterIntegrationConfig {
                                 .handle(MessageChannels.direct("dontContainsF"))))
                 .split()//сплитит одно сообщение на несколько, аналог flatMap из stream
                         //если использовать совместно с route можно одно сообщение разделить на несколько потоков
-                .handle(Files
+                .handle(Files //Активирует какую - либо службу, в данном случае - запись данных в файл
                         .outboundAdapter(new File("/tmp/sia6/files"))
                         .fileExistsMode(FileExistsMode.REPLACE)
                         .appendNewLine(true))

@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.Header;
 Реализация создается автоматически, подобно jpa
  */
 @MessagingGateway(defaultRequestChannel = "textInChannel")//Объявление шлюза сообщений
+//Шлюзы - интерфейсы, через которые приложение может направлять данные в поток интеграции
 public interface FileWriterGateway {
 
     void writeToFile(//Выполняет запись
