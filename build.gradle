@@ -33,12 +33,23 @@ dependencies {
     implementation 'org.springframework.integration:spring-integration-mail'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.apache.commons:commons-text:1.12.0'
+    implementation 'io.projectreactor:reactor-core'
     runtimeOnly 'com.h2database:h2:2.4.240'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Явные зависимости для JUnit 5 (Gradle 9.4.1 требует их явного указания)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+
+    // Для запуска тестов через JUnit Platform
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
