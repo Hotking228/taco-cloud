@@ -1,8 +1,10 @@
 package tacos.email;
 
+import jakarta.mail.BodyPart;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMultipart;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.similarity.LevenshteinDetailedDistance;
 import org.slf4j.Logger;
@@ -35,7 +37,6 @@ public class EmailToOrderTransformer
 
     @Override
     protected AbstractIntegrationMessageBuilder<EmailOrder> doTransform(Message mailMessage) {
-        System.out.println("===========Start checking mail===========");
         EmailOrder tacoOrder = processPayload(mailMessage);
         return MessageBuilder.withPayload(tacoOrder);
     }
@@ -45,20 +46,56 @@ public class EmailToOrderTransformer
             String subject = mailMessage.getSubject();
             if(subject.toUpperCase().contains(SUBJECT_KEYWORDS)){
                 String email = ((InternetAddress)mailMessage.getFrom()[0]).getAddress();
-                String content = mailMessage.getContent().toString();
+                String content = getTextFromMessage(mailMessage);
                 return parseEmailToOrder(email, content);
             }
         } catch (MessagingException e){
             log.error("Messaging exception: {}", e);
-        } catch (IOException e){
-            log.error("IOException: {}", e);
+        } catch (IOException e) {
+            log.error("Messaging exception: {}", e);
         }
 
         return null;
     }
 
+    private String getTextFromMessage(Message message) throws MessagingException, IOException {
+        Object content = message.getContent();
+
+        if(content instanceof String){
+            return (String) content;
+        }
+
+        if(content instanceof MimeMultipart){
+            MimeMultipart multipart = (MimeMultipart) content;
+            return getTextFromMultipart(multipart);
+        }
+
+        return content.toString();
+    }
+
+    private String getTextFromMultipart(MimeMultipart multipart) throws MessagingException, IOException {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < multipart.getCount(); i++){
+            BodyPart bodyPart = multipart.getBodyPart(i);
+            String contentType = bodyPart.getContentType().toLowerCase();
+
+            if(contentType.contains("text/plain")){
+                return bodyPart.getContent().toString();
+            }
+
+            if(bodyPart.getContent() instanceof MimeMultipart){
+                String text = getTextFromMultipart((MimeMultipart) bodyPart.getContent());
+                if(text != null && !text.isEmpty()){
+                     return text;
+                }
+            }
+        }
+
+        return "No text found";
+    }
+
     private EmailOrder parseEmailToOrder(String email, String content){
-        EmailOrder order = new EmailOrder(email);
+        EmailOrder order = new EmailOrder(email, new ArrayList<>());
         String[]lines = content.split("\\r?\\n");
         for(String line : lines){
             if(line.trim().length() > 0 && line.contains(":")){

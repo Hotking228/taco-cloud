@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 
@@ -16,6 +19,9 @@ import java.util.List;
 @Data
 @Table(name = "taco_order")
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TacoOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,7 +48,7 @@ public class TacoOrder implements Serializable {
     @NotBlank(message = "Zip code is required")
     private String deliveryZip;
 
-    @CreditCardNumber(message = "not a valid credit card number")
+//    @CreditCardNumber(message = "not a valid credit card number")
     private String ccNumber;
 
     @Pattern(regexp = "^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",

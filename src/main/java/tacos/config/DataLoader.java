@@ -29,24 +29,24 @@ public class DataLoader implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         Ingredient flourTortilla = new Ingredient(
-                "FLTO", "Flour Tortilla", Ingredient.Type.WRAP);
+                "FLTO", "FLOUR TORTILLA", Ingredient.Type.WRAP);
         Ingredient cornTortilla = new Ingredient(
-                "COTO", "Corn Tortilla", Ingredient.Type.WRAP);
+                "COTO", "CORN TORTILLA", Ingredient.Type.WRAP);
         Ingredient groundBeef = new Ingredient(
-                "GRBF", "Ground Beef", Ingredient.Type.PROTEIN);
+                "GRBF", "GROUND BEEF", Ingredient.Type.PROTEIN);
         Ingredient carnitas = new Ingredient(
-                "CARN", "Carnitas", Ingredient.Type.PROTEIN);
-        Ingredient tomatoes = new Ingredient("TMTO", "Diced Tomatoes", Ingredient.Type.VEGGIES);
+                "CARN", "CARNITAS", Ingredient.Type.PROTEIN);
+        Ingredient tomatoes = new Ingredient("TMTO", "DICED TOMATOES", Ingredient.Type.VEGGIES);
         Ingredient lettuce = new Ingredient(
-                "LETC", "Lettuce", Ingredient.Type.VEGGIES);
+                "LETC", "LETTUCE", Ingredient.Type.VEGGIES);
         Ingredient cheddar = new Ingredient(
-                "CHED", "Cheddar", Ingredient.Type.CHEESE);
+                "CHED", "CHEDDAR", Ingredient.Type.CHEESE);
         Ingredient jack = new Ingredient(
-                "JACK", "Monterrey Jack", Ingredient.Type.CHEESE);
+                "JACK", "MONTERRY JACK", Ingredient.Type.CHEESE);
         Ingredient salsa = new Ingredient(
-                "SLSA", "Salsa", Ingredient.Type.SAUCE);
+                "SLSA", "SALSA", Ingredient.Type.SAUCE);
         Ingredient sourCream = new Ingredient(
-                "SRCR", "Sour Cream", Ingredient.Type.SAUCE);
+                "SRCR", "SOUR CREAM", Ingredient.Type.SAUCE);
         ingredientRepo.save(flourTortilla);
         ingredientRepo.save(cornTortilla);
         ingredientRepo.save(groundBeef);

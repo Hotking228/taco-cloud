@@ -126,8 +126,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/orders/fromEmail").permitAll()
                         .requestMatchers("/design", "/orders").authenticated()
                         .requestMatchers("/", "/**").access(new WebExpressionAuthorizationManager("permitAll()")))
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/orders/fromEmail")
+                )
                 .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true))//второй параметр - всегда переходим

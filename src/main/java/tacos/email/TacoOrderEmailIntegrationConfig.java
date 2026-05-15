@@ -25,8 +25,9 @@ public class TacoOrderEmailIntegrationConfig {
 
         ImapMailReceiver receiver = new ImapMailReceiver(imapUrl);
 
-        // ВАЖНО: Добавляем JavaMail свойства обратно!
         Properties javaMailProperties = new Properties();
+//        javaMailProperties.setProperty("mail.debug", "true");
+//        javaMailProperties.setProperty("mail.debug.auth", "true");
         javaMailProperties.setProperty("mail.imap.ssl.enable", "true");
         javaMailProperties.setProperty("mail.imap.ssl.trust", emailProperties.getHost());
         javaMailProperties.setProperty("mail.imap.auth.mechanisms", "PLAIN");
@@ -35,6 +36,7 @@ public class TacoOrderEmailIntegrationConfig {
 
         receiver.setJavaMailProperties(javaMailProperties);
         receiver.setShouldMarkMessagesAsRead(true);
+        receiver.setSimpleContent(true);
 
         return receiver;
     }
@@ -47,10 +49,8 @@ public class TacoOrderEmailIntegrationConfig {
             OrderSubmitMessageHandler orderSubmitHandler) {
         return IntegrationFlow
                 .from(Mail.imapInboundAdapter(imapMailReceiver),
-                        e -> e.poller(Pollers.fixedDelay(emailProps.getPollRate())
-                                .maxMessagesPerPoll(1)
-                                .errorHandler(t -> System.err.println("Poller error: " + t.getMessage()))))
-                .log()  // Добавляем логирование сообщений
+                        e -> e.poller(Pollers.fixedDelay(emailProps.getPollRate())))
+                .channel("inputChannel")
                 .transform(emailToOrderTransformer)
                 .handle(orderSubmitHandler)
                 .get();
